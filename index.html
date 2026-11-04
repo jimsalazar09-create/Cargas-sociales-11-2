@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="es-CR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1d3830">
+  <meta name="description" content="Presentación interactiva sobre cargas sociales 2026, CTP de Corredores. Jimmy Miranda Cerdas, sección 11-2.">
+  <title>4.9 Cargas sociales · Jimmy Miranda · CTP de Corredores</title>
+  <style>
+    :root{--ink:#1d3830;--cream:#f3efe5;--paper:#fffdf7;--muted:#6a756d;--soft:#dce3d9;--line:#b6c1b6;--accent:#c75a36;--dark:#152a24;--body:clamp(18px,1.67vw,32px);--mini:clamp(16px,1.67vw,32px);--heading:clamp(34px,3.5vw,68px);--display:clamp(66px,7.2vw,138px);--sp:clamp(16px,2.3vw,44px);--ease:cubic-bezier(.2,.7,.2,1)}
+    *{box-sizing:border-box}
+    html,body{margin:0;width:100%;height:100%;background:var(--cream);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+    body{overflow:hidden}
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    button:focus-visible,input:focus-visible,a:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
+    a{color:inherit;text-decoration-thickness:2px;text-underline-offset:3px}
+    .app{height:100dvh;min-height:470px;display:flex;flex-direction:column;overflow:hidden}
+    .topbar{min-height:clamp(58px,6.3vh,80px);display:flex;align-items:center;justify-content:space-between;background:var(--ink);color:var(--paper);padding:0 clamp(18px,3vw,58px);gap:16px;flex:none;z-index:4}
+    .brand{font-size:var(--mini);font-weight:800;letter-spacing:.13em;display:flex;gap:12px;align-items:center}
+    .brand-mark{width:30px;height:30px;display:inline-flex;border:2px solid #edf0e9;align-items:center;justify-content:center;font-weight:900;font-size:18px}
+    .bar-controls{display:flex;align-items:center;gap:clamp(8px,1.4vw,24px)}
+    .bar-controls button{border:1px solid #87a396;background:transparent;color:var(--paper);padding:8px 12px;border-radius:2px;font-size:var(--mini)}
+    .bar-controls button:hover{background:#325247}
+    .position{font-size:var(--mini);font-variant-numeric:tabular-nums;min-width:80px;text-align:right}
+    .main{position:relative;flex:1;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#90a59a transparent}
+    .slide{width:100%;min-height:100%;display:none;padding:clamp(24px,4vh,54px) clamp(24px,6vw,118px);grid-template-rows:auto auto minmax(0,1fr);gap:clamp(10px,1.6vh,24px);align-content:start}
+    .slide.active{display:grid;animation:rise .26s var(--ease)}
+    @keyframes rise{from{opacity:.6;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+    .eyebrow{margin:0;font-size:var(--mini);font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+    h1,h2,h3,p{margin:0}
+    h1,h2{font-family:Georgia,'Times New Roman',serif;letter-spacing:-.035em;font-weight:700;line-height:1.08}
+    h1{font-size:clamp(46px,6.2vw,119px);max-width:1250px}
+    h2{font-size:var(--heading);max-width:1350px}
+    .sub{font-size:var(--body);line-height:1.24;max-width:1200px}
+    .stage{min-height:0;display:flex;align-items:center;justify-content:flex-start;gap:var(--sp);width:100%;flex-wrap:wrap}
+    .stage.top{align-items:flex-start}
+    .stage.split{display:grid;grid-template-columns:1.07fr .93fr;align-items:center}
+    .stage.cols3{display:grid;grid-template-columns:repeat(3,1fr);align-items:stretch}
+    .quiet{color:var(--muted)}
+    .line{height:2px;background:var(--line);width:100%}
+    .note{font-size:var(--mini);line-height:1.3;color:var(--muted)}
+    .marker{display:inline-block;border:2px solid var(--accent);color:var(--accent);font-size:var(--mini);font-weight:900;text-transform:uppercase;letter-spacing:.08em;padding:5px 10px;transform:rotate(-3deg)}
+    .label{font-size:var(--mini);text-transform:uppercase;font-weight:800;letter-spacing:.08em}
+    .number{font-size:var(--display);font-weight:700;letter-spacing:-.09em;line-height:1.04;font-variant-numeric:tabular-nums}
+    .number.medium{font-size:clamp(49px,5.9vw,112px)}
+    .money{font-variant-numeric:tabular-nums;font-weight:800}
+    .data-row{display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:2px solid var(--line);padding:12px 0;font-size:var(--body)}
+    .data-row .val{font-weight:800;white-space:nowrap}
+    .data-row:last-child{border-bottom:0}
+    .panel{background:var(--paper);padding:clamp(18px,2.7vw,48px);border:2px solid var(--ink);width:100%}
+    .panel.invert{background:var(--ink);color:var(--paper)}
+    .panel.soft{background:var(--soft);border-color:var(--soft)}
+    .pill{border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);font-size:var(--body);padding:12px 20px;font-weight:700;text-align:left;transition:background .15s}
+    .pill:hover,.pill.selected{background:var(--ink);color:var(--paper)}
+    .pill.accent{border-color:var(--accent);color:var(--accent)}
+    .pill.accent.selected{background:var(--accent);color:white}
+    .pills{display:flex;gap:12px;flex-wrap:wrap}
+    .btn-action{background:var(--ink);border:2px solid var(--ink);padding:13px 24px;color:var(--paper);font-size:var(--body);font-weight:800;text-align:left}
+    .btn-action:hover{background:#345348}
+    .btn-action.ghost{background:transparent;color:var(--ink)}
+    .btn-action.ghost:hover{background:var(--soft)}
+    .feature{display:flex;gap:clamp(14px,2vw,36px);align-items:center}
+    .feature svg{width:clamp(52px,7vw,130px);height:clamp(52px,7vw,130px);flex:none}
+    .feature strong{display:block;font-size:var(--body);line-height:1.2}
+    .feature span{display:block;font-size:var(--mini);color:var(--muted);margin-top:8px}
+    .flowchart{display:flex;align-items:stretch;gap:12px;width:100%}
+    .flow-node{border:2px solid var(--ink);background:var(--paper);padding:20px;flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;min-height:160px}
+    .flow-node strong{font-size:var(--body)}
+    .flow-node small{font-size:var(--mini);color:var(--muted);margin-top:12px}
+    .flow-arrow{align-self:center;flex:none;color:var(--accent);font-size:clamp(30px,3.2vw,62px);font-weight:700}
+    .line-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:100%}
+    .step-card{border:2px solid var(--line);background:var(--paper);color:var(--ink);padding:clamp(12px,2vw,30px);min-height:150px;text-align:left;display:flex;flex-direction:column;justify-content:space-between;gap:22px}
+    .step-card.active{border-color:var(--accent);background:#f9eade}
+    .step-card span{font-family:Georgia,serif;font-size:clamp(34px,4vw,74px);color:var(--accent)}
+    .step-card strong{font-size:var(--body);line-height:1.12}
+    .step-detail{border-left:8px solid var(--accent);padding:15px 24px;background:var(--paper);font-size:var(--body);line-height:1.24;width:100%;min-height:90px}
+    .metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;width:100%}
+    .metric{background:var(--paper);border:1.5px solid var(--line);padding:18px 22px}
+    .metric .metric-value{display:block;font-size:clamp(31px,3.3vw,63px);font-weight:800;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+    .metric .metric-label{display:block;font-size:var(--mini);color:var(--muted);margin-top:6px}
+    .control-box{display:flex;gap:15px;align-items:center;flex-wrap:wrap;background:var(--soft);padding:18px 22px;width:100%;font-size:var(--body)}
+    input[type=range]{width:min(100%,550px);height:12px;accent-color:var(--accent);flex:1;min-width:150px}
+    input[type=number]{width:210px;max-width:100%;border:2px solid var(--ink);background:white;padding:12px 14px;color:var(--ink);font-weight:700}
+    .formula{background:#e7e9df;padding:14px 22px;border-left:7px solid var(--accent);font-size:var(--body);font-weight:800;font-variant-numeric:tabular-nums;width:100%}
+    .chart{width:100%;display:grid;gap:19px}
+    .bar-row{display:grid;grid-template-columns:minmax(150px,.5fr) minmax(200px,1.5fr) minmax(155px,.6fr);align-items:center;gap:16px;font-size:var(--body)}
+    .bar-track{height:38px;background:var(--soft);position:relative;overflow:hidden}
+    .bar-fill{height:100%;background:var(--ink);width:50%;transition:width .3s}
+    .bar-row:nth-child(2) .bar-fill{background:var(--accent)}
+    .bar-row:nth-child(3) .bar-fill{background:#8fa796}
+    .table-wrap{width:100%;overflow-x:auto}
+    .data-table{width:100%;border-collapse:collapse;font-size:var(--body);font-variant-numeric:tabular-nums;text-align:left}
+    .data-table th{background:var(--ink);color:var(--paper);font-size:var(--mini);font-weight:800;text-transform:uppercase;letter-spacing:.02em;padding:15px 20px}
+    .data-table td{background:var(--paper);border-bottom:2px solid var(--line);padding:19px 20px}
+    .data-table td:last-child,.data-table th:last-child{text-align:right}
+    .data-table tr:last-child td{font-weight:900;background:var(--soft)}
+    .paper{background:var(--paper);box-shadow:12px 16px 0 #d4d8ce;border:2px solid var(--ink);width:min(100%,950px);padding:clamp(18px,2.5vw,44px);transform:rotate(-.45deg);position:relative}
+    .paper-head{display:flex;justify-content:space-between;gap:20px;border-bottom:4px solid var(--ink);padding-bottom:14px;margin-bottom:18px}
+    .paper-head strong{font-size:var(--body)}
+    .paper-head span{font-size:var(--mini)}
+    .paper .stamp{position:absolute;right:7%;top:34%;transform:rotate(-15deg);font-size:clamp(32px,4vw,74px);font-weight:900;opacity:.30;border:5px solid var(--accent);color:var(--accent);padding:3px 15px;pointer-events:none;z-index:2}
+    .paper .data-row{padding:9px 0}
+    .status{font-weight:800;font-size:var(--body);border-left:7px solid var(--accent);padding:15px 22px;max-width:960px;background:var(--paper)}
+    .stack{display:flex;flex-direction:column;gap:18px;width:100%;min-height:0}
+    .triple{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:100%}
+    .tile{border-top:7px solid var(--accent);padding:24px 18px;background:var(--paper);min-height:230px;display:flex;flex-direction:column;justify-content:space-between;gap:12px}
+    .tile span{font-size:var(--mini);color:var(--muted)}
+    .tile strong{font-size:clamp(27px,2.6vw,50px);line-height:1.06;font-family:Georgia,serif}
+    .tile svg{width:70px;height:70px}
+    .supply{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;width:100%;align-items:start}
+    .supply-item{background:var(--paper);border:2px solid var(--line);padding:20px;min-height:190px}
+    .supply-item strong{display:block;font-size:var(--body)}
+    .supply-item small{display:block;font-size:var(--mini);color:var(--muted);margin-top:15px}
+    .supply-item b{font-size:clamp(36px,4vw,78px);color:var(--accent)}
+    .calendar{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;width:100%}
+    .calendar-item{min-height:235px;background:var(--paper);border:2px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:30px}
+    .calendar-item b{font-family:Georgia,serif;color:var(--accent);font-size:clamp(42px,4.5vw,90px)}
+    .calendar-item strong{font-size:var(--body);line-height:1.12}
+    .quiz-box{width:100%;max-width:1050px}
+    .quiz-question{font-family:Georgia,serif;font-size:clamp(30px,3.1vw,58px);line-height:1.12;margin-bottom:18px}
+    .answers{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .answer{border:2px solid var(--ink);background:var(--paper);color:var(--ink);font-size:var(--body);padding:18px;min-height:100px;text-align:left;font-weight:700;transition:background .16s}
+    .answer:disabled{cursor:default}
+    .answer.correct{background:#c6ddcb;border-color:#2a6845}
+    .answer.wrong{background:#f6d5c8;border-color:var(--accent)}
+    .feedback{font-size:var(--body);min-height:70px;line-height:1.22;padding:14px 0}
+    .cards{display:flex;gap:12px;flex-wrap:wrap}
+    .gloss-card{border:2px solid var(--ink);background:var(--paper);color:var(--ink);padding:18px 24px;font-size:var(--body);font-weight:800;min-width:150px}
+    .gloss-card[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+    .gloss-answer{width:100%;max-width:1020px;min-height:150px;background:var(--ink);color:#fff;display:flex;flex-direction:column;gap:15px;justify-content:center;padding:32px}
+    .gloss-answer strong{font-size:clamp(32px,3.5vw,70px);font-family:Georgia,serif}
+    .gloss-answer span{font-size:var(--body);line-height:1.2}
+    .sources{display:grid;gap:16px;width:100%;max-width:1380px}
+    .source{border-bottom:2px solid var(--line);padding:14px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:var(--body)}
+    .source a{font-size:var(--mini);white-space:nowrap}
+    .source strong{font-weight:700}
+    .footer{min-height:clamp(72px,8vh,96px);flex:none;background:var(--cream);border-top:2px solid var(--ink);padding:10px clamp(15px,3vw,55px) env(safe-area-inset-bottom);display:flex;align-items:center;gap:14px;z-index:4}
+    .nav-button{background:transparent;color:var(--ink);border:2px solid var(--ink);font-size:clamp(22px,2vw,38px);font-weight:700;width:54px;height:52px;flex:none}
+    .nav-button:disabled{opacity:.28;cursor:not-allowed}
+    .nav-button:not(:disabled):hover{background:var(--ink);color:var(--paper)}
+    .progress{height:10px;background:#c5cec2;flex:1;overflow:hidden;position:relative}
+    .progress>div{height:100%;width:4.55%;background:var(--accent);transition:width .2s}
+    .foot-caption{font-size:var(--mini);color:var(--muted);text-align:right;min-width:175px}
+    .overlay{position:fixed;inset:0;background:rgba(12,27,22,.80);z-index:10;display:none;align-items:center;justify-content:center;padding:20px}
+    .overlay.open{display:flex}
+    .dialog{background:var(--paper);border:2px solid var(--ink);padding:clamp(20px,3vw,52px);max-height:min(89dvh,1020px);overflow:auto;width:min(100%,1150px);box-shadow:18px 18px 0 var(--accent)}
+    .dialog-header{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:24px}
+    .dialog-header h3{font-family:Georgia,serif;font-size:clamp(28px,3vw,60px)}
+    .dialog-header button{font-size:var(--body);border:2px solid var(--ink);background:transparent;width:54px;height:54px}
+    .dialog-text{font-size:var(--body);line-height:1.35;max-width:100%}
+    .dialog-text p+p{margin-top:15px}
+    .index-list{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    .index-list button{background:var(--paper);border:1px solid var(--line);padding:12px;font-size:var(--mini);text-align:left}
+    .index-list button:hover,.index-list button[aria-current=true]{background:var(--soft);border-color:var(--ink)}
+    .note-sheet{background:var(--ink);color:var(--paper);border-left:12px solid var(--accent);padding:30px;font-size:var(--body);line-height:1.4}
+    .note-sheet .tag{font-weight:800;color:#f4b6a1;text-transform:uppercase;letter-spacing:.08em;font-size:var(--mini);margin-bottom:20px}
+    .mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;width:100%}
+    .reference-tiny{font-size:var(--mini);color:var(--muted)}
+    @media(max-width:850px){
+      :root{--heading:clamp(32px,7.9vw,58px);--display:clamp(62px,13vw,94px);--sp:16px}
+      .topbar{padding:0 15px}
+      .brand{font-size:13px;letter-spacing:.04em}
+      .brand-mark{width:24px;height:24px;font-size:14px}
+      .bar-controls button{font-size:15px;padding:7px 10px}
+      .position{font-size:14px;min-width:50px}
+      .slide{min-height:100%;padding:26px 19px 30px;gap:14px}
+      .stage.split{grid-template-columns:1fr}
+      .stage.cols3,.triple,.supply{grid-template-columns:1fr}
+      .flowchart{flex-direction:column}
+      .flow-node{min-height:90px}
+      .flow-arrow{transform:rotate(90deg)}
+      .line-timeline,.calendar{grid-template-columns:repeat(2,1fr)}
+      .step-card{min-height:110px;gap:12px}
+      .metrics{grid-template-columns:1fr 1fr}
+      .metric{padding:12px}
+      .metric .metric-value{font-size:clamp(25px,6vw,44px)}
+      .bar-row{grid-template-columns:1fr 2fr;gap:6px;font-size:17px}
+      .bar-row .money{grid-column:2;text-align:right}
+      .answers{grid-template-columns:1fr}
+      .answer{min-height:58px}
+      .table-wrap{margin-top:10px}
+      .data-table{font-size:17px}
+      .data-table th,.data-table td{padding:12px 10px}
+      .paper{transform:none;box-shadow:6px 8px 0 #d4d8ce}
+      .source{align-items:start;flex-direction:column}
+      .foot-caption{min-width:90px;font-size:13px}
+      .footer{gap:8px;padding:8px 12px env(safe-area-inset-bottom)}
+      .nav-button{width:47px;height:47px}
+      .panel{padding:18px}
+      .index-list{grid-template-columns:1fr}
+      .dialog{box-shadow:8px 8px 0 var(--accent)}
+      .calendar-item{min-height:145px;gap:8px;padding:12px}
+      .tile{min-height:135px}
+      .supply-item{min-height:140px}
+      .paper-head{flex-wrap:wrap}
+      .paper .stamp{font-size:33px}
+    }
+    @media(max-width:410px){.bar-controls button:first-child{display:none}.stage{align-items:flex-start}.line-timeline{grid-template-columns:repeat(2,1fr)}.control-box{align-items:flex-start;flex-direction:column}.number.medium{font-size:49px}.metrics{grid-template-columns:1fr 1fr}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    @media print{body{overflow:visible}.app{height:auto;display:block}.topbar,.footer,.overlay{display:none!important}.main{overflow:visible}.slide{display:grid!important;min-height:100vh;page-break-after:always}}
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+    <symbol id="i-person" viewBox="0 0 100 100"><circle cx="50" cy="23" r="13" fill="none" stroke="currentColor" stroke-width="5"/><path d="M20 86V65c0-15 13-24 30-24s30 9 30 24v21M35 58h30" stroke="currentColor" fill="none" stroke-width="5" stroke-linecap="square"/></symbol>
+    <symbol id="i-building" viewBox="0 0 100 100"><path d="M15 87V30l35-17 35 17v57M8 87h84M28 42h12m20 0h12M28 57h12m20 0h12M42 87V69h16v18" stroke="currentColor" stroke-width="5" fill="none"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 100 100"><path d="M50 85S12 60 12 36c0-22 27-28 38-8 12-20 38-14 38 8C88 60 50 85 50 85Z" stroke="currentColor" stroke-width="5" fill="none"/><path d="M28 52h15l6-11 8 20 6-9h12" stroke="currentColor" stroke-width="5" fill="none"/></symbol>
+    <symbol id="i-check" viewBox="0 0 100 100"><circle cx="50" cy="50" r="39" stroke="currentColor" stroke-width="5" fill="none"/><path d="m28 50 16 16 29-32" stroke="currentColor" stroke-width="6" fill="none"/></symbol>
+    <symbol id="i-file" viewBox="0 0 100 100"><path d="M22 10h40l18 20v60H22zM62 10v20h18M35 48h32M35 61h32M35 74h22" stroke="currentColor" stroke-width="5" fill="none"/></symbol>
+  </svg>
+  <div class="app" id="app">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">S</span> SURBYTE / EXPEDIENTE LABORAL</div>
+      <div class="bar-controls"><button type="button" id="notesBtn" aria-label="Abrir notas del orador">Notas · N</button><button type="button" id="indexBtn" aria-label="Abrir índice">Índice</button><span class="position" id="position">01 / 22</span></div>
+    </header>
+    <main class="main" id="main" role="main" aria-live="off">
+      <!-- 1 PORTADA -->
+      <section class="slide active" data-label="Portada" aria-label="Diapositiva 1: Portada">
+        <p class="eyebrow">CTP DE CORREDORES / EMPRENDIMIENTO E INNOVACIÓN / 11-2</p>
+        <h1>El salario no es<br>el costo completo.</h1>
+        <div class="stage split">
+          <div class="stack"><p class="sub"><strong>4.9 / Cargas sociales</strong><br>Jimmy Miranda Cerdas · 4/11/2026</p><span class="marker">Empresa de práctica: dato simulado</span></div>
+          <svg viewBox="0 0 480 320" width="100%" aria-label="Ilustración propia de un comprobante salarial" role="img"><rect x="80" y="20" width="310" height="260" fill="#fffdf7" stroke="#1d3830" stroke-width="6"/><path d="M105 77h260M105 121h230M105 160h230M105 198h230" stroke="#1d3830" stroke-width="5"/><rect x="105" y="225" width="180" height="24" fill="#dce3d9"/><path d="m326 235 20 15 34-41" stroke="#c75a36" stroke-width="12" fill="none"/><text x="108" y="61" font-size="36" font-family="Arial" font-weight="700" fill="#1d3830">PLANILLA</text></svg>
+        </div>
+      </section>
+      <!-- 2 CONCEPTO -->
+      <section class="slide" data-label="Concepto" aria-label="Diapositiva 2: Concepto">
+        <p class="eyebrow">01 / CONCEPTO</p>
+        <h2>Las cargas sociales financian protección.</h2>
+        <div class="stage split">
+          <p class="sub">Son aportes obligatorios ligados al salario que sostienen la salud, las pensiones y otros programas sociales.</p>
+          <svg viewBox="0 0 600 330" width="100%" role="img" aria-label="Infografía original de aportes que salen del salario hacia salud, pensión y bienestar"><rect x="172" y="4" width="255" height="84" fill="#1d3830"/><text x="300" y="40" text-anchor="middle" font-size="36" font-weight="700" fill="white">SALARIO</text><text x="300" y="72" text-anchor="middle" font-size="36" fill="white">Aportes</text><path d="M300 89v44M90 158v-23h420v23M300 133v25" stroke="#c75a36" stroke-width="6" fill="none"/><rect x="2" y="162" width="174" height="155" fill="#fffdf7" stroke="#1d3830" stroke-width="4"/><rect x="213" y="162" width="174" height="155" fill="#fffdf7" stroke="#1d3830" stroke-width="4"/><rect x="424" y="162" width="174" height="155" fill="#fffdf7" stroke="#1d3830" stroke-width="4"/><path d="m60 220 27-25 27 25-27 28zM266 218h68m-34-30v60m174-24h76" stroke="#c75a36" fill="none" stroke-width="7"/><g fill="#1d3830" font-size="36" font-weight="700" text-anchor="middle"><text x="89" y="283">Salud</text><text x="300" y="283">Pensión</text><text x="511" y="283">Apoyo</text></g></svg>
+        </div>
+      </section>
+      <!-- 3 IMPORTANCIA -->
+      <section class="slide" data-label="Importancia" aria-label="Diapositiva 3: Importancia para la empresa">
+        <p class="eyebrow">02 / EMPRESA DE PRÁCTICA</p>
+        <h2>Un salario de ₡600 000 requiere más presupuesto.</h2>
+        <div class="stage split">
+          <div><div class="number medium">₡810 980</div><p class="sub">Costo mensual referencial, incluyendo aguinaldo e INS ilustrativo.</p></div>
+          <div class="panel"><div class="data-row"><span>Salario</span><strong>₡600 000</strong></div><div class="data-row"><span>Aportes*</span><strong>₡160 980</strong></div><div class="data-row"><span>Aguinaldo</span><strong>₡50 000</strong></div><p class="note">*Porcentaje referencial de la guía: 26,83 %; incluye 1 % ilustrativo de INS.</p></div>
+        </div>
+      </section>
+      <!-- 4 INSTITUCIONES -->
+      <section class="slide" data-label="Instituciones" aria-label="Diapositiva 4: Instituciones">
+        <p class="eyebrow">03 / BASE LEGAL E INSTITUCIONAL</p>
+        <h2>La CCSS gestiona la planilla; el INS cubre riesgos.</h2>
+        <div class="stage split">
+          <div class="stack"><div class="feature"><svg><use href="#i-building"/></svg><div><strong>CCSS / SICERE</strong><span>Salud, IVM y recaudación</span></div></div><div class="feature"><svg><use href="#i-heart"/></svg><div><strong>INS / RT-Virtual</strong><span>Póliza de riesgos del trabajo</span></div></div></div>
+          <div class="panel invert"><p class="sub">También intervienen FODESAF, IMAS, INA, Banco Popular, FCL y operadoras de pensiones.</p></div>
+        </div>
+      </section>
+      <!-- 5 NORMAS -->
+      <section class="slide" data-label="Leyes y decretos" aria-label="Diapositiva 5: Base legal">
+        <p class="eyebrow">03 / NORMATIVA COSTARRICENSE</p>
+        <h2>Tres normas explican tres obligaciones.</h2>
+        <div class="stage top"><div class="stack"><div class="pills" id="lawTabs"><button class="pill selected" data-law="0">CCSS</button><button class="pill" data-law="1">Trabajo</button><button class="pill" data-law="2">Aguinaldo</button><button class="pill" data-law="3">Salarios 2026</button></div><div class="panel invert" id="lawDetail"><p class="sub">Ley Constitutiva de la CCSS: cuotas, deber de reportar y sanciones (arts. 30 y 44).</p></div><p class="note">Tocá una norma para abrir su explicación; referencias oficiales al final.</p></div></div>
+      </section>
+      <!-- 6 PROCESO 1 -->
+      <section class="slide" data-label="Proceso de planilla" aria-label="Diapositiva 6: Proceso mensual paso a paso">
+        <p class="eyebrow">04 / PASO A PASO</p>
+        <h2>El proceso empieza con datos correctos.</h2>
+        <div class="stage top"><div class="stack"><div class="line-timeline" id="processSteps"><button class="step-card active" data-step="0"><span>01</span><strong>Registrar</strong></button><button class="step-card" data-step="1"><span>02</span><strong>Calcular</strong></button><button class="step-card" data-step="2"><span>03</span><strong>Declarar</strong></button><button class="step-card" data-step="3"><span>04</span><strong>Archivar</strong></button></div><div class="step-detail" id="stepDetail">Empresa: SurByte · Plazo: durante el mes · Costo: operativo, sin monto fijo · Documento: control de horas.</div></div></div>
+      </section>
+      <!-- 7 PROCESO 2 -->
+      <section class="slide" data-label="Cierre mensual" aria-label="Diapositiva 7: Cierre mensual">
+        <p class="eyebrow">04 / PASO A PASO</p>
+        <h2>Declarar no es lo mismo que pagar.</h2>
+        <div class="stage top"><div class="stack"><div class="flowchart"><div class="flow-node"><strong>CCSS</strong><small>Reportar en SICERE</small></div><span class="flow-arrow">→</span><div class="flow-node"><strong>INS</strong><small>Reportar RT-Virtual</small></div><span class="flow-arrow">→</span><div class="flow-node"><strong>Empresa</strong><small>Pagar y archivar</small></div></div><div class="status">Los plazos de la CCSS y del INS se consultan en sus calendarios oficiales.</div></div></div>
+      </section>
+      <!-- 8 SIMULADOR -->
+      <section class="slide" data-label="Simulador" aria-label="Diapositiva 8: Simulador salarial">
+        <p class="eyebrow">05 / EJEMPLO INTERACTIVO · DATOS SIMULADOS</p>
+        <h2>Mové el salario. Cambia toda la planilla.</h2>
+        <div class="stage split">
+          <div class="stack"><div class="control-box"><label for="salary">Salario bruto (₡)</label><input type="range" id="salary" min="400000" max="1200000" step="10000" value="600000" aria-label="Salario bruto"><input type="number" id="salaryInput" min="400000" max="1200000" step="10000" value="600000"></div><div class="formula" id="formula">₡600 000 × 10,83 % = ₡64 980</div><button type="button" class="btn-action ghost" id="costFormulaBtn">Desglosar costo →</button><p class="note">Modelo didáctico 2026; INS supuesto 1 %, no es cotización real.</p></div>
+          <div class="metrics"><div class="metric"><span class="metric-value" id="wageValue">₡600 000</span><span class="metric-label">Salario bruto</span></div><div class="metric"><span class="metric-value" id="deductValue">₡64 980</span><span class="metric-label">Deducción obrera</span></div><div class="metric"><span class="metric-value" id="netValue">₡535 020</span><span class="metric-label">Neto antes de renta</span></div><div class="metric"><span class="metric-value" id="totalValue">₡810 980</span><span class="metric-label">Costo ref. + aguinaldo</span></div></div>
+        </div>
+      </section>
+      <!-- 9 GRÁFICO -->
+      <section class="slide" data-label="Comparar costos" aria-label="Diapositiva 9: Gráfico de costos">
+        <p class="eyebrow">05 / VISUALIZACIÓN DE COSTOS · DATOS SIMULADOS</p>
+        <h2>La cantidad de empleados multiplica el costo.</h2>
+        <div class="stage top"><div class="stack"><div class="control-box"><label for="count">Personas en planilla</label><input type="range" id="count" min="1" max="8" step="1" value="5" aria-label="Cantidad de personas"><strong id="countValue">5</strong><span class="note">Empresa no agrícola simulada</span></div><div class="chart" role="img" aria-label="Gráfico propio de salario bruto, aportes patronales estimados y costo total"><div class="bar-row"><strong>Salarios</strong><div class="bar-track"><div class="bar-fill" id="barWage"></div></div><span class="money" id="barWageText">₡3 000 000</span></div><div class="bar-row"><strong>Aportes ref.</strong><div class="bar-track"><div class="bar-fill" id="barCharge"></div></div><span class="money" id="barChargeText">₡804 900</span></div><div class="bar-row"><strong>Costo total</strong><div class="bar-track"><div class="bar-fill" id="barTotal"></div></div><span class="money" id="barTotalText">₡4 054 900</span></div></div><p class="note" id="inaNote">Con cinco o más personas: tasa referencial 26,83 %, incluido INS ilustrativo.</p></div></div>
+      </section>
+      <!-- 10 TABLA -->
+      <section class="slide" data-label="Planilla parcial" aria-label="Diapositiva 10: Tabla de planilla">
+        <p class="eyebrow">05 / TABLA ORIGINAL · 3 DE 5 EMPLEOS SIMULADOS</p>
+        <h2>La suma de tres boletas revela el compromiso.</h2>
+        <div class="stage top"><div class="stack"><div class="table-wrap"><table class="data-table"><thead><tr><th>Concepto</th><th>Por persona</th><th>Total × 3</th></tr></thead><tbody><tr><td>Salario bruto</td><td class="wagesingle">₡600 000</td><td id="tabWage">₡1 800 000</td></tr><tr><td>Cargas ref. (26,83 %)</td><td id="tabSinglePat">₡160 980</td><td id="tabPat">₡482 940</td></tr><tr><td>Aguinaldo provisionado</td><td id="tabSingleAg">₡50 000</td><td id="tabAg">₡150 000</td></tr><tr><td>Costo mensual referencial</td><td id="tabSingleTotal">₡810 980</td><td id="tabTotal">₡2 432 940</td></tr></tbody></table></div><p class="note">Tres salarios idénticos solo para practicar; los cinco empleos de SurByte son ficticios.</p></div></div>
+      </section>
+      <!-- 11 BOLETA -->
+      <section class="slide" data-label="Boleta simulada" aria-label="Diapositiva 11: Documento simulado de pago">
+        <p class="eyebrow">06 / DOCUMENTO RECREADO EN HTML</p>
+        <h2>Una boleta debe explicar cada descuento.</h2>
+        <div class="stage top"><div class="paper"><div class="stamp">SIMULADO</div><div class="paper-head"><strong>SURBYTE / BOLETA DE PAGO</strong><span>Ejercicio académico · 2026</span></div><div class="data-row"><span>Salario bruto</span><strong class="wagesingle">₡600 000</strong></div><div class="data-row"><span>SEM + IVM + Banco Popular (10,83 %)</span><strong id="receiptDeduct">₡64 980</strong></div><div class="data-row"><span>Salario neto antes de renta</span><strong id="receiptNet">₡535 020</strong></div><p class="note">Formulario recreado; no fue emitido por la CCSS ni por un empleador real.</p></div></div>
+      </section>
+      <!-- 12 PLANILLA SIMULADA -->
+      <section class="slide" data-label="Registro simulado" aria-label="Diapositiva 12: Planilla simulada">
+        <p class="eyebrow">06 / DOCUMENTO RECREADO EN HTML</p>
+        <h2>La planilla identifica a cada persona.</h2>
+        <div class="stage top"><div class="paper"><div class="stamp">SIMULADO</div><div class="paper-head"><strong>REGISTRO DE PLANILLA / EJEMPLO</strong><span>Referente: SICERE · Sin acceso real</span></div><div class="data-row"><span>Persona A · Identificación ficticia</span><strong class="wagesingle">₡600 000</strong></div><div class="data-row"><span>Persona B · Identificación ficticia</span><strong class="wagesingle">₡600 000</strong></div><div class="data-row"><span>Persona C · Identificación ficticia</span><strong class="wagesingle">₡600 000</strong></div><p class="note">Muestra académica de tres registros; no es una planilla presentada.</p></div></div>
+      </section>
+      <!-- 13 ERRORES -->
+      <section class="slide" data-label="Errores comunes" aria-label="Diapositiva 13: Errores frecuentes">
+        <p class="eyebrow">07 / ERRORES COMUNES</p>
+        <h2>El error más grave es reportar de menos.</h2>
+        <div class="stage top"><div class="stack"><div class="pills" id="errorTabs"><button class="pill selected" data-error="0">Omitir personal</button><button class="pill" data-error="1">Subdeclarar</button><button class="pill" data-error="2">Presentar tarde</button></div><div class="panel" id="errorDetail"><p class="sub">Omitir a una persona de la planilla impide registrar correctamente su aseguramiento y sus aportes.</p></div><p class="note">Seleccioná otro caso para explicar por qué afecta al trabajador y a la empresa.</p></div></div>
+      </section>
+      <!-- 14 SANCIONES -->
+      <section class="slide" data-label="Consecuencias" aria-label="Diapositiva 14: Sanciones">
+        <p class="eyebrow">07 / SANCIONES Y CONSECUENCIAS</p>
+        <h2>Una planilla falsa puede generar una multa.</h2>
+        <div class="stage cols3"><div class="tile"><span>LEY CCSS / ART. 44(c)</span><strong>5 salarios base</strong><span>Por omisiones o falsedad salarial.</span></div><div class="tile"><span>MOROSIDAD</span><strong>Cobros y recargos</strong><span>Según normativa y período.</span></div><div class="tile"><span>NO ASEGURAR</span><strong>Responsabilidad patronal</strong><span>Por prestaciones que corresponda reintegrar.</span></div></div>
+      </section>
+      <!-- 15 PRACTICAS -->
+      <section class="slide" data-label="Buenas prácticas" aria-label="Diapositiva 15: Buenas prácticas tecnológicas">
+        <p class="eyebrow">08 / CONTROLES Y TECNOLOGÍA</p>
+        <h2>Un cierre mensual con evidencia evita olvidos.</h2>
+        <div class="stage"><div class="supply"><div class="supply-item"><b>01</b><strong>Hoja de cálculo</strong><small>Salarios, horas y fórmulas</small></div><div class="supply-item"><b>02</b><strong>Calendario</strong><small>Recordatorios CCSS e INS</small></div><div class="supply-item"><b>03</b><strong>Archivo seguro</strong><small>Boletas y comprobantes</small></div></div></div>
+      </section>
+      <!-- 16 APLICACIÓN 1 -->
+      <section class="slide" data-label="Lo realizado" aria-label="Diapositiva 16: Empresa de práctica">
+        <p class="eyebrow">09 / APLICACIÓN EN SURBYTE · TODO SIMULADO</p>
+        <h2>SurByte simuló sus primeros cálculos.</h2>
+        <div class="stage split"><div class="stack"><p class="sub"><span class="marker">DATO SIMULADO</span></p><p class="sub">SurByte ofrece mantenimiento de computadoras y redes en Corredores.</p><button type="button" class="btn-action ghost" id="businessBtn">Ver ficha del negocio →</button></div><div class="panel"><div class="data-row"><span>5 puestos</span><strong>Definidos</strong></div><div class="data-row"><span>3 boletas</span><strong>Recreadas</strong></div><div class="data-row"><span>1 cálculo</span><strong>Comprobado</strong></div></div></div>
+      </section>
+      <!-- 17 APLICACIÓN 2 -->
+      <section class="slide" data-label="Lo pendiente" aria-label="Diapositiva 17: Plan de la empresa">
+        <p class="eyebrow">09 / PRÓXIMOS PASOS · EMPRESA FICTICIA</p>
+        <h2>Antes de contratar, se revisan cuatro puntos.</h2>
+        <div class="stage"><div class="calendar"><div class="calendar-item"><b>01</b><strong>Salario mínimo según puesto</strong></div><div class="calendar-item"><b>02</b><strong>Inscripción y planilla CCSS</strong></div><div class="calendar-item"><b>03</b><strong>Cotización de póliza INS</strong></div><div class="calendar-item"><b>04</b><strong>Fechas y comprobantes</strong></div></div></div>
+      </section>
+      <!-- 18 QUIZ -->
+      <section class="slide" data-label="Mini quiz" aria-label="Diapositiva 18: Mini quiz interactivo">
+        <p class="eyebrow" id="quizEyebrow">10 / MINI QUIZ · 5 PREGUNTAS</p>
+        <h2>¿Quién paga qué?</h2>
+        <div class="stage top"><div class="quiz-box"><p class="quiz-question" id="quizQuestion">¿Qué porcentaje se rebaja al trabajador según la guía de 2026?</p><div class="answers" id="quizAnswers"></div><div class="feedback" id="quizFeedback" aria-live="polite"></div><button type="button" class="btn-action" id="quizNext" style="display:none">Siguiente pregunta →</button></div></div>
+      </section>
+      <!-- 19 CONCLUSIONES -->
+      <section class="slide" data-label="Conclusiones" aria-label="Diapositiva 19: Conclusiones">
+        <p class="eyebrow">11 / CONCLUSIONES</p>
+        <h2>Contratar exige calcular, reportar y respaldar.</h2>
+        <div class="stage cols3"><div class="tile"><svg><use href="#i-person"/></svg><strong>El salario no basta.</strong></div><div class="tile"><svg><use href="#i-building"/></svg><strong>La planilla se declara.</strong></div><div class="tile"><svg><use href="#i-check"/></svg><strong>El control se documenta.</strong></div></div>
+      </section>
+      <!-- 20 GLOSARIO -->
+      <section class="slide" data-label="Glosario" aria-label="Diapositiva 20: Glosario interactivo">
+        <p class="eyebrow">12 / GLOSARIO INTERACTIVO</p>
+        <h2>Seis términos para explicarlo sin enredos.</h2>
+        <div class="stage top"><div class="stack"><div class="cards" id="glossaryButtons"><button class="gloss-card" data-gloss="0" aria-pressed="true">SEM</button><button class="gloss-card" data-gloss="1" aria-pressed="false">IVM</button><button class="gloss-card" data-gloss="2" aria-pressed="false">SICERE</button><button class="gloss-card" data-gloss="3" aria-pressed="false">FCL</button><button class="gloss-card" data-gloss="4" aria-pressed="false">INS</button><button class="gloss-card" data-gloss="5" aria-pressed="false">Aguinaldo</button></div><div class="gloss-answer" id="glossaryAnswer"><strong>SEM</strong><span>Seguro de Salud y Maternidad: cubre prestaciones del seguro de salud de la CCSS.</span></div></div></div>
+      </section>
+      <!-- 21 FUENTES 1 -->
+      <section class="slide" data-label="Fuentes oficiales I" aria-label="Diapositiva 21: Fuentes oficiales">
+        <p class="eyebrow">13 / REFERENCIAS EN FORMATO APA · 1 DE 2</p>
+        <h2>Los cálculos se contrastan con fuentes oficiales.</h2>
+        <div class="stage top"><div class="sources"><div class="source"><strong>CCSS (2025). Informe de auditoría SICERE.</strong><a target="_blank" rel="noopener" href="https://aissfa.ccss.sa.cr/arc/auditoria/informes/AFINPE-0038-2025.pdf">Ver fuente ↗</a></div><div class="source"><strong>MTSS (2026). Temas laborales.</strong><a target="_blank" rel="noopener" href="https://www.mtss.go.cr/temas-laborales/">Ver fuente ↗</a></div><div class="source"><strong>MTSS (2026). Lista de salarios mínimos.</strong><a target="_blank" rel="noopener" href="https://www.mtss.go.cr/temas-laborales/salarios/lista_salarios_minimos_2026.pdf">Ver fuente ↗</a></div><button class="btn-action ghost" type="button" data-cite="1">Ver referencias APA completas</button></div></div>
+      </section>
+      <!-- 22 FUENTES 2 -->
+      <section class="slide" data-label="Fuentes e IA" aria-label="Diapositiva 22: Fuentes y declaración de uso de IA">
+        <p class="eyebrow">13 / REFERENCIAS EN FORMATO APA · 2 DE 2</p>
+        <h2>Las fuentes son verificables. La empresa, simulada.</h2>
+        <div class="stage top"><div class="stack"><div class="sources"><div class="source"><strong>INS (s. f.). Presentación de planillas RT.</strong><a target="_blank" rel="noopener" href="https://www.grupoins.com/rt-virtual/plazo-de-tiempo-para-presentar-las-planillas/">Ver fuente ↗</a></div><div class="source"><strong>CCSS (2017). Ley Constitutiva, art. 44, transcrito en acta.</strong><a target="_blank" rel="noopener" href="https://aissfa.ccss.sa.cr/arc/actas/2017/12/8949.pdf">Ver fuente ↗</a></div><button class="btn-action ghost" type="button" data-cite="2">Ver APA y declaración de IA completas</button></div><div class="status">IA utilizada para diseño y redacción; Jimmy debe validar cada dato antes de presentar.</div></div></div>
+      </section>
+    </main>
+    <footer class="footer">
+      <button type="button" class="nav-button" id="prevBtn" aria-label="Diapositiva anterior" disabled>←</button>
+      <div class="progress" role="progressbar" aria-label="Progreso de la presentación" aria-valuemin="1" aria-valuemax="22" aria-valuenow="1" id="progress"><div id="progressFill"></div></div>
+      <button type="button" class="nav-button" id="nextBtn" aria-label="Diapositiva siguiente">→</button>
+      <span class="foot-caption">Flechas · Swipe · N</span>
+    </footer>
+  </div>
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="overlayTitle" aria-hidden="true">
+    <div class="dialog"><div class="dialog-header"><h3 id="overlayTitle">Índice</h3><button type="button" id="closeOverlay" aria-label="Cerrar ventana">×</button></div><div id="overlayBody"></div></div>
+  </div>
+  <script>
+    'use strict';
+    const slides=[...document.querySelectorAll('.slide')];
+    const $=s=>document.querySelector(s);
+    const fmt=n=>'₡'+Math.round(n).toLocaleString('es-CR').replace(/\s/g,' ').replaceAll(',',' ');
+    const pct=n=>Number(n).toFixed(2).replace('.',',')+' %';
+    let current=0, salary=600000, headcount=5, overlayMode='';
+    const notes=[
+      'Hoy voy a explicar por qué una empresa no puede presupuestar solamente el salario. Usaré SurByte, una empresa inventada de soporte técnico en Corredores. Todo lo que diga de esa empresa es un ejemplo académico.',
+      'Las cargas sociales se relacionan con el salario y ayudan a sostener servicios de salud, pensiones y programas sociales. No son propinas ni un descuento opcional. El empleador y la persona trabajadora tienen aportes distintos.',
+      'Si a alguien le pago seiscientos mil colones, la empresa debe prever otros costos. En el ejemplo de la guía, el cálculo referencial llega a ochocientos diez mil novecientos ochenta colones al mes. Ese total incluye un uno por ciento ilustrativo de INS dentro del veintiséis coma ochenta y tres.',
+      'La Caja administra la planilla y recauda distintas cuotas. El INS es diferente: protege frente a accidentes o enfermedades laborales. La póliza del INS se debe revisar de acuerdo con la actividad real, no asumir una tarifa única.',
+      'La Ley Constitutiva de la Caja establece deberes de cotización y sanciones. El Código de Trabajo regula derechos como vacaciones y riesgos del trabajo. La Ley 2412 regula el aguinaldo. Para salarios mínimos se revisa el decreto vigente por ocupación.',
+      'Primero anotamos bien quién trabajó, el salario, las horas y las ausencias. Luego calculamos deducciones y aportes. Después hacemos las declaraciones que correspondan y archivamos boletas y comprobantes. Pueden tocar cada paso para ver la institución, el plazo y el documento.',
+      'La CCSS y el INS son dos trámites distintos. Presentar la planilla no sustituye pagarla. Lo correcto es revisar los calendarios oficiales y guardar la evidencia de lo reportado y lo pagado.',
+      'Este es el simulador. Muevo el salario bruto y cambian el rebajo de la persona trabajadora, lo que recibe y el costo para el negocio. El diez coma ochenta y tres por ciento es la deducción obrera de la guía para 2026. La prima de INS que usamos es solo ilustrativa.',
+      'Este gráfico enseña qué pasa cuando se contrata más gente. Con menos de cinco trabajadores permanentes no agrícolas, la guía señala una posible exclusión del aporte del INA; el modelo la aplica de manera ilustrativa. Siempre se revisa la situación del patrono antes de usarlo en una planilla real.',
+      'La tabla muestra solo tres de los cinco puestos inventados en SurByte. Cada salario se mantiene igual para facilitar el ejercicio. No confundamos la deducción del trabajador con las cargas que paga el negocio; son montos distintos.',
+      'Esta es una boleta hecha con HTML, no un documento oficial. Una boleta entendible muestra cuánto se gana antes del rebajo, cuánto se deduce y cuánto se recibe antes del impuesto de renta, si corresponde.',
+      'El registro también es simulado: no contiene cédulas reales ni fue enviado a la Caja. Sirve para demostrar que una planilla necesita un registro por cada persona y su salario reportado.',
+      'Un error común es dejar a alguien fuera. Otro es declarar menos salario del que realmente ganó. También se pueden presentar documentos tarde. Estos problemas perjudican a las personas y generan riesgos para el negocio.',
+      'La ley contempla sanciones serias. Por ejemplo, el artículo 44 de la Ley Constitutiva de la Caja prevé una multa de cinco salarios base por omitir trabajadores o falsear salarios. Además puede existir responsabilidad económica por prestaciones y recargos. No usaremos una cifra de multa en colones porque el salario base puede actualizarse.',
+      'Usaría tres herramientas sencillas. Una hoja de cálculo bien revisada, un calendario con alertas y una carpeta con acceso seguro para guardar boletas y recibos. La tecnología no reemplaza la revisión humana.',
+      'SurByte es una empresa completamente ficticia. Para la práctica definimos cinco puestos, recreamos tres boletas y calculamos el costo de un trabajador. No afirmamos que se haya inscrito en Hacienda, CCSS o INS.',
+      'Antes de funcionar de verdad, SurByte tendría que confirmar los salarios mínimos por puesto, inscribirse según corresponda, cotizar el seguro de riesgos y revisar los calendarios. La empresa no ha hecho trámites oficiales: todo es un plan académico.',
+      'Ahora vienen cinco preguntas. Las respuestas explican de inmediato por qué una opción está bien o mal. Pueden responder con los botones; al terminar aparece el puntaje total.',
+      'Hay tres ideas para recordar: el salario bruto no es el costo total, los aportes se reportan y pagan, y cada trámite necesita respaldo. Estos controles protegen al trabajador y también al negocio.',
+      'Este glosario permite repasar las siglas principales. Puedo tocar SEM, IVM, SICERE, FCL, INS y aguinaldo. La idea es entender las palabras, no solo memorizarlas.',
+      'Estas fuentes incluyen la CCSS y el Ministerio de Trabajo. El documento del docente se utilizó como punto de partida. Cada fuente puede abrirse desde la presentación al tener internet.',
+      'Finalmente, el INS explica sus planillas en RT-Virtual y la CCSS documenta las sanciones legales. Utilicé inteligencia artificial para ayudar a diseñar y redactar esta presentación; debo comprobar los datos antes de exponer. La empresa y las boletas son ficticias.'
+    ];
+    const law=[
+      'Ley Constitutiva de la CCSS: deber de cotizar, reportar y cumplir; arts. 30 y 44.',
+      'Código de Trabajo: art. 153 (vacaciones) y Título IV (riesgos del trabajo).',
+      'Ley 2412: aguinaldo = suma de salarios del período ÷ 12; pago en diciembre.',
+      'Decreto 45303-MTSS: salarios mínimos por ocupación, vigentes desde 1/1/2026.'
+    ];
+    const process=[
+      'Empresa: SurByte · Plazo: durante el mes · Costo: operativo, sin monto fijo · Documento: control de horas.',
+      'Responsable: administración · Plazo: antes de declarar · Costo: aportes variables · Documento: hoja de cálculo.',
+      'Instituciones: CCSS e INS · Plazo: calendarios oficiales · Costo: cuotas y prima · Documento: SICERE y RT-Virtual.',
+      'Responsable: SurByte · Plazo: al pagar · Costo: importe de la planilla · Documento: boletas y recibos.'
+    ];
+    const errors=[
+      'Omitir a una persona de la planilla impide registrar correctamente su aseguramiento y sus aportes.',
+      'Subdeclarar salarios altera las cuotas y puede causar sanciones y reclamos posteriores.',
+      'Presentar o pagar después del plazo puede generar recargos y problemas de cumplimiento.'
+    ];
+    const glossary=[
+      ['SEM','Seguro de Salud y Maternidad: cubre prestaciones del seguro de salud de la CCSS.'],
+      ['IVM','Invalidez, Vejez y Muerte: régimen de pensiones administrado por la CCSS.'],
+      ['SICERE','Sistema Centralizado de Recaudación: permite gestionar la planilla ante la CCSS.'],
+      ['FCL','Fondo de Capitalización Laboral: aporte patronal contemplado en la protección al trabajador.'],
+      ['INS','Instituto Nacional de Seguros: administra la póliza obligatoria de riesgos del trabajo.'],
+      ['Aguinaldo','Pago adicional calculado con la suma de salarios del período entre doce.']
+    ];
+    const quiz=[
+      {q:'¿Qué porcentaje se rebaja al trabajador en 2026?',options:['10,83 %','26,83 %','13 %'],right:0,why:'El 10,83 % es la cuota obrera de referencia en la guía y el MTSS.'},
+      {q:'¿Dónde se reporta la planilla a la Caja?',options:['SICERE','SICOP','Registro Nacional'],right:0,why:'SICERE es el sistema relacionado con la planilla de la CCSS.'},
+      {q:'Con ₡600 000, ¿cuál es el rebajo del 10,83 %?',options:['₡50 000','₡64 980','₡160 980'],right:1,why:'₡600 000 × 0,1083 = ₡64 980.'},
+      {q:'¿Quién paga la póliza de riesgos del trabajo?',options:['El trabajador','La municipalidad','El patrono'],right:2,why:'La póliza de riesgos del trabajo es responsabilidad del patrono.'},
+      {q:'¿Cuánto se provisiona al mes de aguinaldo por ₡600 000?',options:['₡50 000','₡64 980','₡600 000'],right:0,why:'Si el salario es estable: ₡600 000 ÷ 12 = ₡50 000.'}
+    ];
+    let qIndex=0,score=0,qAnswered=false;
+    function go(n){if(!Number.isFinite(n))return;current=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,i)=>{s.classList.toggle('active',i===current);s.setAttribute('aria-hidden',i===current?'false':'true')});$('#position').textContent=String(current+1).padStart(2,'0')+' / '+slides.length;$('#prevBtn').disabled=current===0;$('#nextBtn').disabled=current===slides.length-1;$('#progressFill').style.width=((current+1)/slides.length*100)+'%';$('#progress').setAttribute('aria-valuenow',current+1);$('#main').scrollTo({top:0,behavior:'instant'});if(overlayMode==='notes')showNotes();}
+    function showOverlay(title,html,mode){overlayMode=mode;$('#overlayTitle').textContent=title;$('#overlayBody').innerHTML=html;$('#overlay').classList.add('open');$('#overlay').setAttribute('aria-hidden','false');$('#closeOverlay').focus();}
+    function closeOverlay(){overlayMode='';$('#overlay').classList.remove('open');$('#overlay').setAttribute('aria-hidden','true');}
+    function showIndex(){showOverlay('Índice de la presentación','<p style="margin-bottom:16px"><button class="btn-action" data-open-notes="1">Ver notas de esta diapositiva</button></p><div class="index-list">'+slides.map((s,i)=>`<button data-jump="${i}" aria-current="${current===i}">${String(i+1).padStart(2,'0')} · ${s.dataset.label}</button>`).join('')+'</div>','index');}
+    function showNotes(){showOverlay('Notas del orador · '+String(current+1).padStart(2,'0'),'<div class="note-sheet"><div class="tag">Explicación en palabras sencillas · no leer literalmente</div><p>'+notes[current]+'</p></div>','notes');}
+    $('#prevBtn').addEventListener('click',()=>go(current-1));$('#nextBtn').addEventListener('click',()=>go(current+1));$('#indexBtn').addEventListener('click',showIndex);$('#notesBtn').addEventListener('click',()=>overlayMode==='notes'?closeOverlay():showNotes());$('#closeOverlay').addEventListener('click',closeOverlay);
+    $('#overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeOverlay();let b=e.target.closest('[data-jump]');if(b){let n=Number(b.dataset.jump);closeOverlay();go(n)}if(e.target.closest('[data-open-notes]'))showNotes()});
+    document.addEventListener('keydown',e=>{const target=e.target;const formFocus=target&&['INPUT','TEXTAREA','SELECT'].includes(target.tagName);if(e.key==='Escape'&&overlayMode){closeOverlay();return;}if(e.key.toLowerCase()==='n'&&!formFocus){e.preventDefault();overlayMode==='notes'?closeOverlay():showNotes();return;}if(overlayMode==='notes'&&['ArrowLeft','ArrowRight','PageDown','PageUp'].includes(e.key)){e.preventDefault();go(current+(e.key==='ArrowLeft'||e.key==='PageUp'?-1:1));return;}if(overlayMode)return;if(formFocus)return;if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(current+1)}if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(current-1)}if(e.key==='Home'){e.preventDefault();go(0)}if(e.key==='End'){e.preventDefault();go(slides.length-1)}});
+    let tx=0,ty=0;$('#main').addEventListener('touchstart',e=>{if(e.touches.length!==1)return;tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});$('#main').addEventListener('touchend',e=>{if(!tx||e.changedTouches.length!==1)return;const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.3&&!e.target.closest('input,button,.table-wrap'))go(current+(dx<0?1:-1));tx=0;ty=0},{passive:true});
+    $('#lawTabs').addEventListener('click',e=>{const b=e.target.closest('[data-law]');if(!b)return;$('#lawTabs').querySelectorAll('button').forEach(x=>x.classList.toggle('selected',x===b));$('#lawDetail').innerHTML='<p class="sub">'+law[Number(b.dataset.law)]+'</p>'});
+    $('#processSteps').addEventListener('click',e=>{const b=e.target.closest('[data-step]');if(!b)return;$('#processSteps').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));$('#stepDetail').textContent=process[Number(b.dataset.step)]});
+    $('#errorTabs').addEventListener('click',e=>{const b=e.target.closest('[data-error]');if(!b)return;$('#errorTabs').querySelectorAll('button').forEach(x=>x.classList.toggle('selected',x===b));$('#errorDetail').innerHTML='<p class="sub">'+errors[Number(b.dataset.error)]+'</p>'});
+    $('#glossaryButtons').addEventListener('click',e=>{const b=e.target.closest('[data-gloss]');if(!b)return;$('#glossaryButtons').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));const g=glossary[Number(b.dataset.gloss)];$('#glossaryAnswer').innerHTML='<strong>'+g[0]+'</strong><span>'+g[1]+'</span>'});
+    function getCalc(){const ina=headcount>=5?.015:0;const withoutIns=.2433+ina;const ins=.01;const patronal=salary*(withoutIns+ins);const worker=salary*.1083;const aguinaldo=salary/12;return{ina,withoutIns,ins,patronal,worker,aguinaldo,net:salary-worker,total:salary+patronal+aguinaldo,rate:withoutIns+ins};}
+    function setSalary(v){salary=Math.max(400000,Math.min(1200000,Math.round(Number(v)/10000)*10000));$('#salary').value=salary;$('#salaryInput').value=salary;updateCalc()}
+    function updateCalc(){const c=getCalc();$('#wageValue').textContent=fmt(salary);$('#deductValue').textContent=fmt(c.worker);$('#netValue').textContent=fmt(c.net);$('#totalValue').textContent=fmt(c.total);$('#formula').textContent=`${fmt(salary)} × 10,83 % = ${fmt(c.worker)}`;$('#countValue').textContent=headcount;const m=headcount;const cost=salary*m,ref=c.patronal*m,all=c.total*m;const max=Math.max(1,all);$('#barWage').style.width=(100*cost/max)+'%';$('#barCharge').style.width=(100*ref/max)+'%';$('#barTotal').style.width=(100*all/max)+'%';$('#barWageText').textContent=fmt(cost);$('#barChargeText').textContent=fmt(ref);$('#barTotalText').textContent=fmt(all);$('#inaNote').textContent=(m>=5?'Con cinco o más personas: ':'Con menos de cinco personas permanentes no agrícolas: ')+`tasa referencial ${pct(c.rate*100)}; incluye INS supuesto 1 %. Verificar excepciones.`;document.querySelectorAll('.wagesingle').forEach(e=>e.textContent=fmt(salary));$('#receiptDeduct').textContent=fmt(c.worker);$('#receiptNet').textContent=fmt(c.net);$('#tabWage').textContent=fmt(salary*3);$('#tabSinglePat').textContent=fmt(c.patronal);$('#tabPat').textContent=fmt(c.patronal*3);$('#tabSingleAg').textContent=fmt(c.aguinaldo);$('#tabAg').textContent=fmt(c.aguinaldo*3);$('#tabSingleTotal').textContent=fmt(c.total);$('#tabTotal').textContent=fmt(c.total*3);}
+    $('#salary').addEventListener('input',e=>setSalary(e.target.value));$('#salaryInput').addEventListener('change',e=>setSalary(e.target.value));$('#count').addEventListener('input',e=>{headcount=Number(e.target.value);updateCalc()});
+    function renderQuiz(){if(qIndex>=quiz.length){$('#quizEyebrow').textContent='10 / MINI QUIZ TERMINADO';$('#quizQuestion').textContent=`Resultado: ${score} de 5 respuestas correctas.`;$('#quizAnswers').innerHTML='';$('#quizFeedback').textContent=score===5?'Dominaste el tema.':score>=3?'Buen resultado. Repasá las explicaciones.':'Revisá el simulador y volvé a intentarlo.';$('#quizNext').textContent='Repetir quiz ↻';$('#quizNext').style.display='inline-block';return;}qAnswered=false;const q=quiz[qIndex];$('#quizEyebrow').textContent=`10 / MINI QUIZ · ${qIndex+1} DE 5`;$('#quizQuestion').textContent=q.q;$('#quizAnswers').innerHTML=q.options.map((o,i)=>`<button type="button" class="answer" data-answer="${i}">${String.fromCharCode(65+i)}. ${o}</button>`).join('');$('#quizFeedback').textContent='Elegí una respuesta para ver la explicación.';$('#quizNext').style.display='none'}
+    $('#quizAnswers').addEventListener('click',e=>{const b=e.target.closest('[data-answer]');if(!b||qAnswered)return;qAnswered=true;const choice=Number(b.dataset.answer),q=quiz[qIndex];if(choice===q.right)score++;$('#quizAnswers').querySelectorAll('button').forEach((x,i)=>{x.disabled=true;if(i===q.right)x.classList.add('correct');else if(i===choice)x.classList.add('wrong')});$('#quizFeedback').textContent=(choice===q.right?'¡Correcto! ':'No es esa. ')+q.why;$('#quizNext').textContent=qIndex===4?'Ver puntaje →':'Siguiente pregunta →';$('#quizNext').style.display='inline-block'});
+    $('#quizNext').addEventListener('click',()=>{if(qIndex>=quiz.length){score=0;qIndex=0}else{qIndex++}renderQuiz()});
+    const citationContent={
+      1:`<p><strong>Caja Costarricense de Seguro Social.</strong> (2025). <em>Informe AFINPE-0038-2025: Evaluación de controles del proceso de planillas.</em> https://aissfa.ccss.sa.cr/arc/auditoria/informes/AFINPE-0038-2025.pdf</p><p><strong>Ministerio de Trabajo y Seguridad Social.</strong> (2026). <em>Temas laborales.</em> https://www.mtss.go.cr/temas-laborales/</p><p><strong>Ministerio de Trabajo y Seguridad Social.</strong> (2026). <em>Lista de salarios mínimos por ocupación: Año 2026.</em> https://www.mtss.go.cr/temas-laborales/salarios/lista_salarios_minimos_2026.pdf</p>`,
+      2:`<p><strong>Instituto Nacional de Seguros.</strong> (s. f.). <em>Presentación de las planillas: Plazo de tiempo.</em> https://www.grupoins.com/rt-virtual/plazo-de-tiempo-para-presentar-las-planillas/</p><p><strong>Caja Costarricense de Seguro Social.</strong> (2017). <em>Acta de Junta Directiva n.º 8949</em> (reproduce art. 44 de Ley Constitutiva). https://aissfa.ccss.sa.cr/arc/actas/2017/12/8949.pdf</p><p><strong>Material del docente.</strong> (s. f.). <em>Realizar labores en las áreas funcionales que conforman la empresa</em> [guía de clase, sección 4.9 y rúbrica 5/5.3]. CTP Guaycara (encabezado del archivo entregado).</p><p><strong>Declaración de IA:</strong> Se utilizó ChatGPT para organizar, redactar y programar la presentación. El expositor debe validar cifras, normas y enlaces en las instituciones oficiales antes de usarla. Las ilustraciones, boletas y empresa SurByte son propias o ficticias. No se usaron fotos externas.</p>`
+    };
+    document.addEventListener('click',e=>{const b=e.target.closest('[data-cite]');if(b){const n=b.dataset.cite;showOverlay('Referencias APA · '+n,'<div class="dialog-text">'+citationContent[n]+'</div>','cite')}});
+    $('#costFormulaBtn').addEventListener('click',()=>{const c=getCalc();showOverlay('Fórmula del costo · caso simulado',`<div class="dialog-text"><p><strong>Aportes sin INS:</strong> ${fmt(salary)} × ${pct(c.withoutIns*100)} = ${fmt(salary*c.withoutIns)}.</p><p><strong>INS supuesto:</strong> ${fmt(salary)} × 1,00 % = ${fmt(salary*c.ins)}.</p><p><strong>Aguinaldo:</strong> ${fmt(salary)} ÷ 12 = ${fmt(c.aguinaldo)}.</p><p><strong>Total:</strong> ${fmt(salary)} + ${fmt(c.patronal)} + ${fmt(c.aguinaldo)} = ${fmt(c.total)}.</p><p>Referencias de 2026 de la guía. La póliza real debe cotizarse en el INS.</p></div>`,'formula')});
+    $('#businessBtn').addEventListener('click',()=>showOverlay('SurByte Soporte · DATOS SIMULADOS','<div class="dialog-text"><p><strong>Actividad:</strong> mantenimiento de computadoras y redes en Corredores.</p><p><strong>Precios inventados:</strong> diagnóstico ₡15 000 y mantenimiento ₡25 000 por servicio.</p><p><strong>Personal:</strong> cinco puestos ficticios; salario didáctico ₡600 000 por persona.</p><p><strong>Presupuesto mensual inventado:</strong> ventas ₡6 000 000; otros gastos operativos ₡900 000.</p><p><strong>Trámites reales efectuados:</strong> ninguno. Empresa únicamente académica.</p></div>','business'));
+    renderQuiz();updateCalc();go(0);
+  </script>
+</body>
+</html>
